@@ -61,9 +61,9 @@ mavenPublishing {
             }
         }
         scm {
-            connection.set("scm:git:https://github.com/mobiletoly/kmpertrace.git")
-            developerConnection.set("scm:git:ssh://git@github.com/mobiletoly/kmpertrace.git")
-            url.set("https://github.com/mobiletoly/kmpertrace")
+            connection.set("scm:git:https://github.com/pluralfusion/kmpertrace.git")
+            developerConnection.set("scm:git:ssh://git@github.com/pluralfusion/kmpertrace.git")
+            url.set("https://github.com/pluralfusion/kmpertrace")
         }
     }
 }

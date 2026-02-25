@@ -133,21 +133,29 @@ reconstructed from plain log output.*
    **Or** (this is what I usually do) just copy/paste to file from Android Studio's Logcat view.
 
 
-5. **Visualize with the CLI (non-interactive mode)**
+5. **Install the CLI from release artifacts (recommended)**
 
-   Clone the repo and build the binary for the CLI (need for both interactive and non-interactive
-   modes):
+   The CLI requires Java 17+ (`java` available on `PATH` or via `JAVA_HOME`).
+   The installer resolves the latest `cli-v*` release and verifies checksums.
+
+   macOS/Linux:
 
    ```bash
-   git clone https://github.com/mobiletoly/kmpertrace.git
-   cd kmpertrace
-   ./gradlew :kmpertrace-cli:installDist
+   curl -fsSL https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.sh | sh
    ```
 
-   Run the CLI to visualize the logs from existing file (non-interactive print mode):
+   Windows (PowerShell):
+
+   ```powershell
+   iwr https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.ps1 -UseBasicParsing | iex
+   ```
+
+6. **Visualize with the CLI (non-interactive mode)**
+
+   Run the CLI to visualize logs from an existing file:
 
    ```bash
-   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli print --file /path/to/your.log --color=on
+   kmpertrace-cli print --file /path/to/your.log --color=on
    ```
 
    Or visualize logs in real-time from `adb logcat` (drop `adb logcat -c` if you don't want to clear
@@ -155,7 +163,7 @@ reconstructed from plain log output.*
 
    ```bash
    adb logcat -c && adb logcat -v epoch --pid="$(adb shell pidof dev.goquick.kmpertrace.sampleapp)" \
-    | ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli print --follow --color=on
+    | kmpertrace-cli print --follow --color=on
    ```
 
    (replace `dev.goquick.kmpertrace.sampleapp` with your app's package name)
@@ -163,21 +171,19 @@ reconstructed from plain log output.*
    You'll see per‑trace trees similar to the screenshot from the beginning of this README, with
    spans, durations, log lines, and error stack traces.
 
-6. **Visualize with the CLI (interactive mode)**
+7. **Visualize with the CLI (interactive mode)**
 
    We have experimental interactive mode in kmpertrace-cli. E.g. to run it for adb logs you can
    run:
 
    ```bash
-   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli tui --source adb \
-      --adb-pkg dev.goquick.kmpertrace.sampleapp
+   kmpertrace-cli tui --source adb --adb-pkg dev.goquick.kmpertrace.sampleapp
    ```
 
    or for iOS:
 
    ```bash
-   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli tui --source ios \
-      --ios-proc SampleApp
+   kmpertrace-cli tui --source ios --ios-proc SampleApp
    ```
 
    This tool was tested on MacOS and Linux. Non-interactive print mode (or piping logs into tui
@@ -187,6 +193,15 @@ reconstructed from plain log output.*
    Windows does this by default); classic cmd.exe may look worse but still functions.
 
    See `docs/CLI-UserGuide.md` for current flags and interactive keys.
+
+8. **(Optional) Build the CLI from source**
+
+   ```bash
+   git clone https://github.com/pluralfusion/kmpertrace.git
+   cd kmpertrace
+   ./gradlew :kmpertrace-cli:installDist
+   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli --help
+   ```
 
 ---
 

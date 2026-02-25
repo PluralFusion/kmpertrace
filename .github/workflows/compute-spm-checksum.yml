@@ -96,7 +96,7 @@ jobs:
 
           if [ -n "${{ github.event.inputs.kmpertrace_version }}" ]; then
             echo "Suggested binaryTarget URL:"
-            echo "  https://github.com/mobiletoly/kmpertrace/releases/download/v${{ github.event.inputs.kmpertrace_version }}/KmperTraceRuntime.xcframework.zip"
+            echo "  https://github.com/pluralfusion/kmpertrace/releases/download/v${{ github.event.inputs.kmpertrace_version }}/KmperTraceRuntime.xcframework.zip"
             echo ""
           fi
 

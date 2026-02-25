@@ -178,7 +178,7 @@ tasks.register("prepareSpmRelease") {
             ?: error("Failed to parse checksum")
 
         val template = rootProject.file("Package.swift.template").readText()
-        val url = "https://github.com/mobiletoly/kmpertrace/releases/download/v$version/KmperTraceRuntime.xcframework.zip"
+        val url = "https://github.com/pluralfusion/kmpertrace/releases/download/v$version/KmperTraceRuntime.xcframework.zip"
         val rendered = template
             .replace("__URL__", url)
             .replace("__CHECKSUM__", checksum)
@@ -205,7 +205,7 @@ mavenPublishing {
     pom {
         name.set("KmperTrace Runtime")
         description.set("Multiplatform runtime for KmperTrace logging and tracing")
-        url.set("https://github.com/mobiletoly/kmpertrace")
+        url.set("https://github.com/pluralfusion/kmpertrace")
         licenses {
             license {
                 name.set("Apache License 2.0")
@@ -220,9 +220,9 @@ mavenPublishing {
             }
         }
         scm {
-            connection = "scm:git:https://github.com/mobiletoly/kmpertrace.git"
-            developerConnection = "scm:git:ssh://git@github.com/mobiletoly/kmpertrace.git"
-            url = "https://github.com/mobiletoly/kmpertrace"
+            connection = "scm:git:https://github.com/pluralfusion/kmpertrace.git"
+            developerConnection = "scm:git:ssh://git@github.com/pluralfusion/kmpertrace.git"
+            url = "https://github.com/pluralfusion/kmpertrace"
         }
     }
 }
