@@ -93,7 +93,15 @@ resolve_tag() {
       -H "User-Agent: kmpertrace-cli-installer" \
       "https://api.github.com/repos/$REPO/releases?per_page=100") || die "Failed to query GitHub releases"
 
-    tag=$(printf '%s' "$releases_json" | awk -F'"' '/"tag_name": "cli-v/ {print $4; exit}')
+    tag=$(printf '%s' "$releases_json" | awk '
+      match($0, /"tag_name"[[:space:]]*:[[:space:]]*"cli-v[^"]*"/) {
+        s = substr($0, RSTART, RLENGTH)
+        sub(/^.*"tag_name"[[:space:]]*:[[:space:]]*"/, "", s)
+        sub(/"$/, "", s)
+        print s
+        exit
+      }
+    ')
     [ -n "$tag" ] || die "Could not find a cli-v* release tag"
     printf '%s' "$tag"
     return
