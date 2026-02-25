@@ -191,28 +191,29 @@ reconstructed from plain log output.*
    You'll see per‑trace trees similar to the screenshot from the beginning of this README, with
    spans, durations, log lines, and error stack traces.
 
-7. **Visualize with the CLI (interactive mode)**
+---
 
-   We have experimental interactive mode in kmpertrace-cli. E.g. to run it for adb logs you can
-   run:
+## Visualize with the CLI (interactive mode)
 
-   ```bash
-   kmpertrace-cli tui --source adb --adb-pkg dev.goquick.kmpertrace.sampleapp
-   ```
+We have experimental interactive mode in kmpertrace-cli. E.g. to run it for adb logs you can run:
 
-   or for iOS:
+```bash
+kmpertrace-cli tui --source adb --adb-pkg dev.goquick.kmpertrace.sampleapp
+```
 
-   ```bash
-   kmpertrace-cli tui --source ios --ios-proc SampleApp
-   ```
+or for iOS:
 
-   This tool was tested on MacOS and Linux. Non-interactive print mode (or piping logs into tui
-   --source stdin/file) should work on Windows. The interactive single-key raw mode doesn’t (Windows
-   lacks the POSIX stty path), so Windows will fall back to the line-buffered input: type the letter
-   and press Enter. ANSI styling works best in Windows Terminal/PowerShell with VT enabled (modern
-   Windows does this by default); classic cmd.exe may look worse but still functions.
+```bash
+kmpertrace-cli tui --source ios --ios-proc SampleApp
+```
 
-   See `docs/CLI-UserGuide.md` for current flags and interactive keys.
+This tool was tested on MacOS and Linux. Non-interactive print mode (or piping logs into tui
+--source stdin/file) should work on Windows. The interactive single-key raw mode doesn’t (Windows
+lacks the POSIX stty path), so Windows will fall back to the line-buffered input: type the letter
+and press Enter. ANSI styling works best in Windows Terminal/PowerShell with VT enabled (modern
+Windows does this by default); classic cmd.exe may look worse but still functions.
+
+See `docs/CLI-UserGuide.md` for current flags and interactive keys.
 
 ---
 
