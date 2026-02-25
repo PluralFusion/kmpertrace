@@ -71,7 +71,44 @@ reconstructed from plain log output.*
 
 ## Quick Start
 
-1. **Add the runtime dependency**
+1. **Install `kmpertrace-cli`**
+
+   The CLI requires Java 17+ (`java` available on `PATH` or via `JAVA_HOME`).
+
+   Recommended (release installer):
+
+
+   **macOS/Linux**:
+
+   ```bash
+   curl -fsSL https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.sh | sh
+   ```
+
+
+   **Windows (PowerShell)**:
+
+   ```powershell
+   iwr https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.ps1 -UseBasicParsing | iex
+   ```
+
+
+   Verify install:
+
+   ```bash
+   kmpertrace-cli --help
+   ```
+
+
+   Optional (build from latest source):
+
+   ```bash
+   git clone https://github.com/pluralfusion/kmpertrace.git
+   cd kmpertrace
+   ./gradlew :kmpertrace-cli:installDist
+   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli --help
+   ```
+
+2. **Add the runtime dependency**
 
    In your KMP project, add `kmpertrace-runtime` to the source sets where you want tracing/logging:
 
@@ -83,7 +120,7 @@ reconstructed from plain log output.*
    }
    ```
 
-2. **Configure KmperTrace at startup**
+3. **Configure KmperTrace at startup**
 
    Somewhere in your app initialization (per process):
 
@@ -98,7 +135,7 @@ reconstructed from plain log output.*
    }
    ```
 
-3. **Wrap work in spans and log**
+4. **Wrap work in spans and log**
 
    ```kotlin
    suspend fun refreshAll() = traceSpan(component = "ProfileViewModel", operation = "refreshAll") {
@@ -116,7 +153,7 @@ reconstructed from plain log output.*
    the tree.
 
 
-4. **Run your app and collect logs for Android (non-interactive mode)**
+5. **Run your app and collect logs for Android (non-interactive mode)**
 
    Run the app as usual; KmperTrace will emit structured log lines to the platform backend (Logcat,
    NSLog, stdout, etc.).
@@ -132,23 +169,6 @@ reconstructed from plain log output.*
    <br><br>
    **Or** (this is what I usually do) just copy/paste to file from Android Studio's Logcat view.
 
-
-5. **Install the CLI from release artifacts (recommended)**
-
-   The CLI requires Java 17+ (`java` available on `PATH` or via `JAVA_HOME`).
-   The installer resolves the latest `cli-v*` release and verifies checksums.
-
-   macOS/Linux:
-
-   ```bash
-   curl -fsSL https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.sh | sh
-   ```
-
-   Windows (PowerShell):
-
-   ```powershell
-   iwr https://github.com/pluralfusion/kmpertrace/releases/latest/download/install.ps1 -UseBasicParsing | iex
-   ```
 
 6. **Visualize with the CLI (non-interactive mode)**
 
@@ -193,15 +213,6 @@ reconstructed from plain log output.*
    Windows does this by default); classic cmd.exe may look worse but still functions.
 
    See `docs/CLI-UserGuide.md` for current flags and interactive keys.
-
-8. **(Optional) Build the CLI from source**
-
-   ```bash
-   git clone https://github.com/pluralfusion/kmpertrace.git
-   cd kmpertrace
-   ./gradlew :kmpertrace-cli:installDist
-   ./kmpertrace-cli/build/install/kmpertrace-cli/bin/kmpertrace-cli --help
-   ```
 
 ---
 

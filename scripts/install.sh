@@ -161,13 +161,16 @@ fi
 echo "[kmpertrace-cli installer] Installed to: $TARGET_DIR"
 echo "[kmpertrace-cli installer] Launcher: $BIN_DIR/kmpertrace-cli"
 echo "[kmpertrace-cli installer] $JAVA_NOTICE"
+echo "[kmpertrace-cli installer] Ensure this directory is on PATH: $BIN_DIR"
 
 case ":$PATH:" in
   *":$BIN_DIR:"*)
+    echo "[kmpertrace-cli installer] PATH already contains $BIN_DIR"
     echo "[kmpertrace-cli installer] Run: kmpertrace-cli --help"
     ;;
   *)
-    echo "[kmpertrace-cli installer] Add to PATH: export PATH=\"$BIN_DIR:\$PATH\""
+    echo "[kmpertrace-cli installer] Add to PATH in this shell:"
+    echo "[kmpertrace-cli installer]   export PATH=\"$BIN_DIR:\$PATH\""
     echo "[kmpertrace-cli installer] Then run: kmpertrace-cli --help"
     ;;
 esac
