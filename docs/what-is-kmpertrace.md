@@ -20,7 +20,9 @@ backend first.
 > **It is:** a lightweight tracing + structured-logging approach where traces can be reconstructed later from plain logs.  
 > **It isn't:** an APM/collector you must deploy just to get value.
 
-![KmperTrace CLI output example](cli_scr1.png)
+<br>
+![KmperTrace CLI output example](cli_scr1_dark.png)
+<br>
 
 ## How it works (runtime + CLI)
 
