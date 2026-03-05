@@ -3,18 +3,26 @@
 KmperTrace is a tracing and structured logging toolkit for Android, iOS/Swift, Desktop, and Wasm.
 It helps you reconstruct end-to-end execution flows from plain logs.
 
-In real apps, logs exist, but the story does not.
+In real apps, logs exist - but the story is missing.
 You see isolated lines and it is hard to answer simple questions:
 
 - What user action started this flow?
 - Which async step failed?
-- How did execution hop across coroutines and callbacks?
+- How did execution hop across async/await/coroutines and callbacks?
 
 KmperTrace is designed to solve that gap.
 
 ## What KmperTrace is
 
-KmperTrace has two main parts:
+**In one sentence:** KmperTrace makes logs behave like traces - without requiring you to adopt an observability
+backend first.
+
+> **It is:** a lightweight tracing + structured-logging approach where traces can be reconstructed later from plain logs.  
+> **It isn’t:** an APM/collector you must deploy just to get value.
+
+![KmperTrace CLI output example](cli_scr1.png)
+
+## How it works (runtime + CLI)
 
 - `kmpertrace-runtime`: a runtime library that lets you wrap work in spans (`traceSpan { ... }`) and emit structured
   logs with trace and span IDs.
@@ -26,12 +34,33 @@ thread hops.
 For non-coroutine async boundaries (SDK callbacks, handlers, executors), it provides `TraceSnapshot` helpers to
 re-attach context.
 
-Under the hood, KmperTrace uses a Kotlin Multiplatform runtime, but you do not need to position it as "for KMP only" to
-get value.
+That last part is the "real world" win: when you cross a callback boundary, it's easy to lose context and end up with
+logs that don't belong to any trace. `TraceSnapshot` lets you carry the context across:
 
-![KmperTrace CLI output example](cli_scr1.png)
+```kotlin
+traceSpan("Payments", "chargeCard") {
+    val snap = TraceSnapshot.capture()
+    sdk.chargeCard { result ->
+        snap.runWithContext { Log.i { "charge result=$result" } }
+    }
+}
+```
 
-## Why it is valuable
+Here’s the idea in one glance - **raw logs become a readable flow tree**:
+```
+tap.refresh  412ms
+└─ ProfileViewModel.refreshAll  410ms
+   ├─ repository.loadProfile    180ms
+   ├─ repository.loadContacts    95ms  ERROR: timeout
+   └─ repository.loadActivity   110ms
+```
+
+Instead of "a thousand unrelated lines", you get *a story* with nesting, timing, and the failing step.
+
+Under the hood, it's powered by Kotlin Multiplatform - but the value is broader than "KMP": it’s a consistent tracing
+language for cross-platform apps.
+
+## What you get
 
 ### 1) You get traceability from plain logs
 
@@ -54,33 +83,17 @@ This shortens the path from "something failed" to "this span failed for this rea
 
 ### 4) Better "user journey" visibility
 
-With `LogContext.journey(...)`, traces can start from explicit triggers like taps or system events.
-This makes traces read like real product flows, not only method-level traces.
+Sometimes the most important question is: **“what kicked this off?”**
+
+With `LogContext.journey(...)`, you can start traces from explicit triggers like taps or system events, so traces read
+like product flows - not just method-level noise.
+
+Think: `tap.refresh`, `push.open`, `system.network_change`... then everything that follows becomes a coherent tree.
 
 ### 5) Control over signal vs noise
 
 You can tune logging levels and optionally gate debug attributes with configuration (`emitDebugAttributes`).
 That helps teams keep useful production logs while limiting noisy or sensitive details.
-
-## A small example
-
-```kotlin
-suspend fun refreshAll() = traceSpan(component = "ProfileViewModel", operation = "refreshAll") {
-    Log.i { "Refreshing profile..." }
-    repository.loadProfile()
-    repository.loadContacts()
-    repository.loadActivity()
-    Log.i { "Refresh complete" }
-}
-```
-
-Then render a collected log file:
-
-```bash
-kmpertrace-cli print --file /path/to/app.log --color=on
-```
-
-The CLI reconstructs span trees from those structured lines, including nested operations and failures.
 
 ## When KmperTrace is a good fit
 
