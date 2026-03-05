@@ -18,7 +18,7 @@ KmperTrace is designed to solve that gap.
 backend first.
 
 > **It is:** a lightweight tracing + structured-logging approach where traces can be reconstructed later from plain logs.  
-> **It isn’t:** an APM/collector you must deploy just to get value.
+> **It isn't:** an APM/collector you must deploy just to get value.
 
 ![KmperTrace CLI output example](cli_scr1.png)
 
@@ -46,7 +46,7 @@ traceSpan("Payments", "chargeCard") {
 }
 ```
 
-Here’s the idea in one glance - **raw logs become a readable flow tree**:
+Here's the idea in one glance - **raw logs become a readable flow tree**:
 ```
 tap.refresh  412ms
 └─ ProfileViewModel.refreshAll  410ms
@@ -57,7 +57,7 @@ tap.refresh  412ms
 
 Instead of "a thousand unrelated lines", you get *a story* with nesting, timing, and the failing step.
 
-Under the hood, it's powered by Kotlin Multiplatform - but the value is broader than "KMP": it’s a consistent tracing
+Under the hood, it's powered by Kotlin Multiplatform - but the value is broader than "KMP": it's a consistent tracing
 language for cross-platform apps.
 
 ## What you get
@@ -83,7 +83,7 @@ This shortens the path from "something failed" to "this span failed for this rea
 
 ### 4) Better "user journey" visibility
 
-Sometimes the most important question is: **“what kicked this off?”**
+Sometimes the most important question is: **"what kicked this off?"**
 
 With `LogContext.journey(...)`, you can start traces from explicit triggers like taps or system events, so traces read
 like product flows - not just method-level noise.
