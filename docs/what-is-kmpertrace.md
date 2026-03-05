@@ -23,7 +23,6 @@ backend first.
 
 ![KmperTrace CLI output example](cli_scr1_dark.png)
 
-<br>
 ## How it works (runtime + CLI)
 
 - `kmpertrace-runtime`: a runtime library that lets you wrap work in spans (`traceSpan { ... }`) and emit structured
