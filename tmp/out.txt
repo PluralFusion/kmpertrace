@@ -1,6 +1,0 @@
-trace trace-1
-└─ root (20 ms)
-   └─ ❌ 2025-01-01T00:00:01Z Api: boom
-         java.lang.IllegalStateException: boom
-             at A.foo(A.kt:10)
-             at B.bar(B.kt:20)
