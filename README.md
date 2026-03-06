@@ -5,12 +5,13 @@
 
 ![KmperTrace](docs/kmpertrace-logo.png)
 
-Span‑aware tracing and structured logging for Kotlin Multiplatform - with a CLI that turns raw logs
-into readable trace trees.
+KmperTrace is a tracing and structured logging toolkit for Android, iOS/Swift, Desktop, and Wasm.
+It helps you reconstruct end-to-end execution flows from plain logs.
 
 When you're chasing a bug that hops across coroutines, threads, and platforms, plain logs are not
-enough. KmperTrace lets you wrap important operations in spans, emit structured log lines with
-trace/span IDs, and then reconstruct the full call tree from a single log file.
+enough. KmperTrace lets you Wrap important operations in spans, emit structured log lines with
+trace/span IDs, and then use the CLI to rebuild the full call flow from a logfile and even by directly
+streaming from your device.
 
 ![KmperTrace CLI output showing overlapping downloads with errors and stack trace](./docs/cli_scr1.png)
 
@@ -21,28 +22,28 @@ reconstructed from plain log output.*
 
 ## What KmperTrace gives you
 
-- **End‑to‑end traces from just logs.**  
-  No agents, no collectors: KmperTrace encodes `trace`/`span` IDs and span start/end markers into log lines
-  that can be shipped with whatever logging pipeline you already use.
+- **End-to-end execution flows from plain logs.**  
+  KmperTrace encodes `trace`/`span` IDs and span start/end markers into log lines, so you can
+  reconstruct readable traces without needing a collector or observability backend first.
 
-- **Consistent tracing across KMP targets.**  
-  One API that works on Android, iOS, JVM, Wasm, and Kotlin/Native desktop targets (Linux/macOS/Windows via `mingwX64`), with span/trace propagation that survives
-  coroutine and thread hops.
+- **Works across Android, iOS/Swift, Desktop, and Wasm.**  
+  KmperTrace fits naturally in Kotlin Multiplatform and Android projects and can also be consumed 
+  from regular Swift iOS projects via the provided XCFramework.
+
+- **Lightweight and simple.**  
+  No dependencies on external observability systems or collectors. You get readable, structured
+  log lines with trace/span IDs that can be processed offline or shipped to any backend.
 
 - **Callback-friendly context bridging.**  
-  Capture a `TraceSnapshot` inside a span and re-install it in non-coroutine callbacks (Handler/Executor/SDK listeners)
-  so logs stay attached to the originating span.
+  Capture a `TraceSnapshot` inside a span and re-install it in non-coroutine callbacks
+  (Handler/Executor/SDK listeners) so logs stay attached to the originating span.
 
 - **Journey-friendly root spans.**  
-  Wrap user/system triggers in `LogContext.journey(...)` so each trace starts with an explicit “why”, not just a method name (see `docs/Journeys.md`).
-
-- **Structured, low‑overhead logging.**  
-  Logfmt‑compatible output that includes level, timestamp, trace/span IDs, source
-  component/operation, and optional stack traces for errors.
+  Wrap user/system triggers in `LogContext.journey(...)` so each trace starts with an explicit
+  "why", not just a method name (see `docs/Journeys.md`).
 
 - **Developer‑friendly tooling.**  
-  A CLI (`kmpertrace-cli`) that can ingest a flat logfile and render readable trace trees, plus a
-  sample Compose Multiplatform app that demonstrates end‑to‑end flow.
+  A CLI (`kmpertrace-cli`) that can ingest a flat logfile and render readable trace trees
 
 - **Pluggable sinks.**  
   Platform‑native log sinks by default (Logcat, NSLog/`print`, stdout/console), with hooks to add
