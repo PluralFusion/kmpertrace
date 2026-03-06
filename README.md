@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/github/license/PluralFusion/kmpertrace)](https://github.com/PluralFusion/kmpertrace/blob/main/LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/dev.goquick/kmpertrace-runtime)](https://central.sonatype.com/artifact/dev.goquick/kmpertrace-runtime)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.goquick.kmpertrace/kmpertrace-runtime)](https://central.sonatype.com/artifact/dev.goquick.kmpertrace/kmpertrace-runtime)
 [![GitHub Release](https://img.shields.io/github/v/release/PluralFusion/kmpertrace)](https://github.com/PluralFusion/kmpertrace/releases/latest)
 [![Kotlin](https://img.shields.io/badge/kotlin-multiplatform-7F52FF?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
 
