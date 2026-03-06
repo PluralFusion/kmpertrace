@@ -21,7 +21,7 @@ reconstructed from plain log output.*
   that can be shipped with whatever logging pipeline you already use.
 
 - **Consistent tracing across KMP targets.**  
-  One API that works on Android, iOS, JVM, and Wasm, with span/trace propagation that survives
+  One API that works on Android, iOS, JVM, Wasm, and Kotlin/Native desktop targets (Linux/macOS/Windows via `mingwX64`), with span/trace propagation that survives
   coroutine and thread hops.
 
 - **Callback-friendly context bridging.**  

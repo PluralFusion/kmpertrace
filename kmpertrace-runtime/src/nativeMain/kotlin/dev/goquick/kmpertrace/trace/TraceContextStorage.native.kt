@@ -14,7 +14,6 @@ private class TraceContextElement(
 
     // Wrap the continuation so that when it resumes on a native thread we re-install the captured trace context.
     override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T> =
-        // Install our wrapper first so downstream dispatchers resume with trace applied.
         downstream?.interceptContinuation(TraceContinuation(continuation, traceValue))
             ?: TraceContinuation(continuation, traceValue)
 
@@ -48,10 +47,11 @@ private class TraceContinuation<T>(
 }
 
 @ThreadLocal
-private var currentTraceContext: TraceContext? = null // keep one TraceContext per native thread
+private var currentTraceContext: TraceContext? = null // Keep one TraceContext per native thread.
 
 actual object TraceContextStorage {
     actual fun get(): TraceContext? = currentTraceContext
+
     actual fun set(value: TraceContext?) {
         currentTraceContext = value
     }
@@ -59,5 +59,5 @@ actual object TraceContextStorage {
     actual fun element(
         value: TraceContext?,
         downstream: ContinuationInterceptor?
-    ): CoroutineContext = TraceContextElement(value, downstream) // capture current context + downstream interceptor chain
+    ): CoroutineContext = TraceContextElement(value, downstream)
 }
