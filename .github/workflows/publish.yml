@@ -218,16 +218,43 @@ jobs:
 
       - name: Upload XCFramework as Release asset
         if: ${{ env.ACT != 'true' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.meta.outputs.tag }}
-          fail_on_unmatched_files: true
-          files: |
-            kmpertrace-runtime/build/XCFrameworks/release/KmperTraceRuntime.xcframework.zip
-            build/release-assets/install.sh
-            build/release-assets/install.ps1
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.meta.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          assets=(
+            "kmpertrace-runtime/build/XCFrameworks/release/KmperTraceRuntime.xcframework.zip"
+            "build/release-assets/install.sh"
+            "build/release-assets/install.ps1"
+          )
+
+          for asset in "${assets[@]}"; do
+            if [ ! -f "$asset" ]; then
+              echo "Release asset not found: $asset" >&2
+              exit 1
+            fi
+          done
+
+          for attempt in 1 2 3 4 5; do
+            echo "Uploading runtime release assets (attempt $attempt/5)"
+            if gh release upload "$TAG_NAME" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --clobber; then
+              echo "Runtime release assets uploaded successfully."
+              gh release view "$TAG_NAME" --repo "$GITHUB_REPOSITORY"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 5 ]; then
+              echo "Failed to upload runtime release assets after 5 attempts." >&2
+              exit 1
+            fi
+
+            sleep_seconds=$((attempt * 10))
+            echo "Upload failed; retrying in ${sleep_seconds}s..."
+            sleep "$sleep_seconds"
+          done
 
   publish-cli:
     name: CLI release (cli-vX.Y.Z)
@@ -336,15 +363,43 @@ jobs:
 
       - name: Upload CLI distribution assets
         if: ${{ env.ACT != 'true' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.meta.outputs.tag }}
-          fail_on_unmatched_files: true
-          files: |
-            kmpertrace-cli/build/distributions/kmpertrace-cli-${{ steps.meta.outputs.cli_version }}.zip
-            kmpertrace-cli/build/distributions/kmpertrace-cli-${{ steps.meta.outputs.cli_version }}.tar
-            kmpertrace-cli/build/distributions/SHA256SUMS
-            build/release-assets/install.sh
-            build/release-assets/install.ps1
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.meta.outputs.tag }}
+          CLI_VERSION: ${{ steps.meta.outputs.cli_version }}
+        run: |
+          set -euo pipefail
+
+          assets=(
+            "kmpertrace-cli/build/distributions/kmpertrace-cli-${CLI_VERSION}.zip"
+            "kmpertrace-cli/build/distributions/kmpertrace-cli-${CLI_VERSION}.tar"
+            "kmpertrace-cli/build/distributions/SHA256SUMS"
+            "build/release-assets/install.sh"
+            "build/release-assets/install.ps1"
+          )
+
+          for asset in "${assets[@]}"; do
+            if [ ! -f "$asset" ]; then
+              echo "Release asset not found: $asset" >&2
+              exit 1
+            fi
+          done
+
+          for attempt in 1 2 3 4 5; do
+            echo "Uploading CLI release assets (attempt $attempt/5)"
+            if gh release upload "$TAG_NAME" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --clobber; then
+              echo "CLI release assets uploaded successfully."
+              gh release view "$TAG_NAME" --repo "$GITHUB_REPOSITORY"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 5 ]; then
+              echo "Failed to upload CLI release assets after 5 attempts." >&2
+              exit 1
+            fi
+
+            sleep_seconds=$((attempt * 10))
+            echo "Upload failed; retrying in ${sleep_seconds}s..."
+            sleep "$sleep_seconds"
+          done
