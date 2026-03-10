@@ -6,7 +6,7 @@ This repo has two independent release lanes driven by tag prefixes:
 - Both lanes also upload installer assets: `install.sh` and `install.ps1`.
 
 ## Tag conventions
-- Runtime/framework release tag: `v<version>` (example: `v0.3.2`).
+- Runtime/framework release tag: `v<version>` (example: `v0.3.3`).
 - CLI release tag: `cli-v<version>` (example: `cli-v0.1.0`).
 - The `publish.yml` workflow routes by tag prefix:
   - `v*` (excluding `cli-v*`) -> runtime lane.
@@ -14,7 +14,7 @@ This repo has two independent release lanes driven by tag prefixes:
 
 ## Runtime release steps (Maven + SwiftPM)
 1) Bump runtime version
-   - Edit `gradle.properties` `kmpertraceVersion=...` (example: `0.3.2` -> `0.3.3`).
+   - Edit `gradle.properties` `kmpertraceVersion=...` (example: `0.3.3` -> `0.3.4`).
    - Commit and push to `main`.
 
 2) Compute SwiftPM checksum for XCFramework zip
