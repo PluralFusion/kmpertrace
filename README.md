@@ -121,7 +121,7 @@ reconstructed from plain log output.*
    ```kotlin
    commonMain {
        dependencies {
-           implementation("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
+           implementation("dev.goquick.kmpertrace:kmpertrace-runtime:0.3.3")
        }
    }
    ```
