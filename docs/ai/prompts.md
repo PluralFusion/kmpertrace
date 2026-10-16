@@ -8,7 +8,7 @@ Ten prompts you can copy into an AI coding assistant. Each names the files or lo
 Add KmperTrace 0.3.3 to this app and wrap the login flow in a span.
 Files: the shared module's build.gradle.kts, the app entry point (Application class or main),
 and LoginRepository.kt.
-Follow docs/AI-assistants.md: add dev.goquick.kmpertrace:kmpertrace-runtime, call
+Follow docs/ai/AI-assistants.md: add dev.goquick.kmpertrace:kmpertrace-runtime, call
 KmperTrace.configure once at process start, and wrap login in traceSpan with the userId as an
 attribute. Put user data in "?" debug-only attributes.
 ```

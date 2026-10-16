@@ -340,7 +340,7 @@ If you use an AI coding assistant in a project that uses KmperTrace, see
 read it.
 
 More pages: [recipes](docs/recipes.md), [moving from println, Timber or Kermit](docs/migration.md)
-and [prompts to give an assistant](docs/prompts.md).
+and [prompts to give an assistant](docs/ai/prompts.md).
 
 ---
 
