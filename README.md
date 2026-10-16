@@ -5,8 +5,8 @@
 
 ![KmperTrace](docs/kmpertrace-logo.png)
 
-KmperTrace is a tracing and structured logging toolkit for Android, iOS/Swift, Desktop, and Wasm.
-It helps you reconstruct end-to-end execution flows from plain logs.
+KmperTrace is a Kotlin Multiplatform library for structured logging and tracing on Android, iOS, desktop and Wasm.
+A command-line viewer, `kmpertrace-cli`, rebuilds each trace from plain log output as a readable tree.
 
 When you're chasing a bug that hops across coroutines, threads, and platforms, plain logs are not
 enough. KmperTrace lets you Wrap important operations in spans, emit structured log lines with
