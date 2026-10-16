@@ -201,6 +201,85 @@ tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
     environment("KOTLIN_NATIVE_IGNORE_SERVICE_MESSAGES", "true")
 }
 
+// Compile the Kotlin code blocks in the docs so they cannot drift from the API.
+// A block fenced as ```kotlin compile is compiled (JVM) against the runtime. A block fenced as
+// ```kotlin fragment is skipped. A kotlin block with neither marker fails the build.
+// Blocks of one file are compiled together, in order, and may use these imports without writing them.
+val docSnippetFiles = listOf("README.md", "docs/AI-assistants.md", "docs/recipes.md", "docs/migration.md")
+val docSnippetPrelude = listOf(
+    "dev.goquick.kmpertrace.core.Level",
+    "dev.goquick.kmpertrace.log.KmperTrace",
+    "dev.goquick.kmpertrace.log.Log",
+    "dev.goquick.kmpertrace.log.journey",
+    "dev.goquick.kmpertrace.trace.TraceTrigger",
+    "dev.goquick.kmpertrace.trace.captureTraceSnapshot",
+    "dev.goquick.kmpertrace.trace.traceSpan",
+    "dev.goquick.kmpertrace.trace.withTraceContext",
+    "kotlinx.coroutines.CoroutineDispatcher",
+)
+
+val generateDocSnippets by tasks.registering {
+    group = "verification"
+    description = "Extracts '```kotlin compile' blocks from the docs into a generated test source file."
+    val rootDir = rootProject.layout.projectDirectory.asFile
+    val outDir = layout.buildDirectory.dir("generated/docSnippets/kotlin")
+    inputs.files(docSnippetFiles.map { File(rootDir, it) })
+    outputs.dir(outDir)
+    doLast {
+        val out = outDir.get().asFile
+        out.deleteRecursively()
+        out.mkdirs()
+        docSnippetFiles.forEach { rel ->
+            val file = File(rootDir, rel)
+            if (!file.exists()) return@forEach
+            val bodies = mutableListOf<String>()
+            val imports = LinkedHashSet<String>(docSnippetPrelude.map { "import $it" })
+            var ticks = 0
+            var indent = ""
+            var marker: String? = null
+            var current = mutableListOf<String>()
+            file.readLines().forEachIndexed { index, line ->
+                val trimmed = line.trim()
+                if (ticks == 0) {
+                    if (trimmed.startsWith("```")) {
+                        ticks = trimmed.takeWhile { it == '`' }.length
+                        indent = line.takeWhile { it == ' ' }
+                        val info = trimmed.drop(ticks).trim().split(Regex("\\s+"))
+                        marker = when {
+                            info[0] != "kotlin" -> "other"
+                            info.getOrNull(1) == "compile" -> "compile"
+                            info.getOrNull(1) == "fragment" -> "fragment"
+                            else -> throw GradleException("$rel:${index + 1}: kotlin block needs 'compile' or 'fragment' after the language")
+                        }
+                        current = mutableListOf()
+                    }
+                } else if (trimmed == "`".repeat(ticks)) {
+                    if (marker == "compile") bodies += current.joinToString("\n")
+                    ticks = 0
+                } else if (marker == "compile") {
+                    val text = line.removePrefix(indent)
+                    if (text.startsWith("import ")) imports += text.trim() else current += text
+                }
+            }
+            if (bodies.isNotEmpty()) {
+                val name = rel.substringAfterLast('/').substringBeforeLast('.').lowercase().filter { it.isLetter() }
+                val dir = File(out, "docsnippets").also { it.mkdirs() }
+                File(dir, "$name.kt").writeText(
+                    "package docsnippets.$name\n\n" + imports.joinToString("\n") + "\n\n" + bodies.joinToString("\n\n") + "\n"
+                )
+            }
+        }
+    }
+}
+
+kotlin.sourceSets.named("jvmTest") { kotlin.srcDir(generateDocSnippets) }
+
+tasks.register("checkDocSnippets") {
+    group = "verification"
+    description = "Compiles the Kotlin code blocks marked 'compile' in README.md and docs/."
+    dependsOn("compileTestKotlinJvm")
+}
+
 mavenPublishing {
     coordinates(kmpertraceGroup, "kmpertrace-runtime", kmpertraceVersion)
     publishToMavenCentral()

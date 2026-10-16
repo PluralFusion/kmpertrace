@@ -118,7 +118,7 @@ reconstructed from plain log output.*
 
    In your KMP project, add `kmpertrace-runtime` to the source sets where you want tracing/logging:
 
-   ```kotlin
+   ```kotlin fragment
    commonMain {
        dependencies {
            implementation("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
@@ -130,7 +130,7 @@ reconstructed from plain log output.*
 
    Somewhere in your app initialization (per process):
 
-   ```kotlin
+   ```kotlin fragment
    fun App() {
         LaunchedEffect(Unit) { 
             KmperTrace.configure(
@@ -143,7 +143,7 @@ reconstructed from plain log output.*
 
 4. **Wrap work in spans and log**
 
-   ```kotlin
+   ```kotlin fragment
    suspend fun refreshAll() = traceSpan(component = "ProfileViewModel", operation = "refreshAll") {
        Log.i { "Refreshing profile..." }
 
@@ -253,7 +253,7 @@ For more details, see `docs/Tracing.md`.
 Below is a code snippet that triggers a download when a button is pressed, fetches JSON
 via Ktor, parses it, and logs each important step with KmperTrace.
 
-```kotlin
+```kotlin fragment
 @Serializable
 data class Profile(val name: String, val downloads: Int)
 

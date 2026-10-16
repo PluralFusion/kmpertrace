@@ -40,7 +40,7 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
 
 Imports used by the examples in this guide:
 
-```kotlin
+```kotlin fragment
 import dev.goquick.kmpertrace.core.Level
 import dev.goquick.kmpertrace.log.KmperTrace
 import dev.goquick.kmpertrace.log.Log
@@ -56,7 +56,7 @@ import dev.goquick.kmpertrace.trace.android.postWithTrace // Android only
 
 **Call configure early.** No log sink is installed until `KmperTrace.configure` runs, so records logged before it are dropped. Call it at process start (for example in `Application.onCreate` on Android or `main` on desktop).
 
-```kotlin
+```kotlin compile
 fun setUpKmperTrace(isDebugBuild: Boolean) {
     KmperTrace.configure(
         minLevel = if (isDebugBuild) Level.DEBUG else Level.INFO,
@@ -88,7 +88,7 @@ fun setUpKmperTrace(isDebugBuild: Boolean) {
 
 This uses the `traceSpan(component, operation, attributes, block)` overload. The span name is `ProfileRepository.loadProfile`.
 
-```kotlin
+```kotlin compile
 data class Profile(val name: String)
 
 interface ProfileApi {
@@ -113,7 +113,7 @@ class ProfileRepository(private val api: ProfileApi) {
 
 If the caller handles the failure, log it there. This is the one `Log.e` call for the exception:
 
-```kotlin
+```kotlin compile
 suspend fun profileName(repo: ProfileRepository, userId: String, email: String): String =
     try {
         repo.loadProfile(userId, email).name
@@ -127,7 +127,7 @@ suspend fun profileName(repo: ProfileRepository, userId: String, email: String):
 
 Capture the snapshot inside the span. Re-install it in the callback with `withTraceSnapshot`. The snapshot does not create a span and does not keep the span open. The span ends when its block returns.
 
-```kotlin
+```kotlin compile
 interface Sdk {
     fun setListener(listener: (String) -> Unit)
 }
@@ -150,7 +150,7 @@ For Android `Handler` callbacks, the runtime provides two extension functions in
 
 They post the block and install the snapshot while it runs. Capture the snapshot in the span, then pass it in:
 
-```kotlin
+```kotlin fragment
 interface ScaleSdk {
     fun connect(mac: String)
 }
@@ -223,7 +223,7 @@ Correct form: `kmpertrace-cli tui --file app.log --component ProfileRepository`.
 **Calling `Log.journey(...)`.** `journey` is an extension on `LogContext`, and its `trigger` parameter takes a `TraceTrigger` value, so a plain string does not compile. Called inside an active trace, it creates a child span in that trace. To start a new trace, call it where no span is active.
 Correct form, at the place where the user action starts:
 
-```kotlin
+```kotlin compile
 suspend fun onRefreshClicked(refresh: suspend () -> Unit) =
     Log.forComponent("ProfileScreen").journey(
         operation = "refresh",
