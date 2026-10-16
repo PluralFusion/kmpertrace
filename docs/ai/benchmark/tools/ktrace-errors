@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+# Prototype of a proposed "kmpertrace-cli print --errors-only": lists traces that contain a failed span.
+import subprocess, sys
+f = sys.argv[1]
+out = subprocess.run(["kmpertrace-cli", "print", "--file", f, "--span-attrs", "on", "--color", "off"], capture_output=True, text=True).stdout
+blocks, cur = [], []
+for line in out.splitlines():
+    if line.startswith("trace "):
+        if cur: blocks.append(cur)
+        cur = [line]
+    elif cur is not None: cur.append(line)
+if cur: blocks.append(cur)
+for b in blocks:
+    if any("❌" in l for l in b):
+        print(b[0])
+        for l in b[1:]:
+            if "❌" in l: print(l)
+        print()
