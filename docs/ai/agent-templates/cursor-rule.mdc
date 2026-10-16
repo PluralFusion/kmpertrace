@@ -1,0 +1,51 @@
+---
+description: Use when adding logging, tracing a flow, or debugging with traces in code that uses KmperTrace (dev.goquick.kmpertrace)
+globs: "**/*.kt"
+alwaysApply: false
+---
+
+# KmperTrace
+
+Verified against KmperTrace 0.3.3. Full guide: docs/ai/AI-assistants.md in the KmperTrace repository.
+
+## Setup
+- Dependency (commonMain): `implementation("dev.goquick.kmpertrace:kmpertrace-runtime:0.3.3")`
+- Call `KmperTrace.configure(minLevel = Level.DEBUG, serviceName = "my-app", emitDebugAttributes = isDebugBuild)` once at process start, before the first `Log` or `traceSpan` call. Do not call it inside the first composition. Records logged before it runs are dropped.
+
+## Spans and logs
+- Wrap an operation: `traceSpan(component = "X", operation = "y", attributes = mapOf("id" to id)) { ... }` (`dev.goquick.kmpertrace.trace.traceSpan`).
+- Inside a span, call `Log.d`, `Log.i`, `Log.w` or `Log.e` with a message lambda. Log lines take their component and operation from the span. Do not open a second span or call `withOperation` with the same name.
+- `log { }` and `log(Level.DEBUG) { }` work only inside a `traceSpan` block (`SpanScope.log`).
+- `log.withOperation("x")` tags log lines. It creates no span.
+- Start a trace from a user action with `Log.forComponent("X").journey(operation, TraceTrigger.tap("Y")) { ... }`. `journey` is an extension on `LogContext` and writes a `trigger` attribute. It writes no log line.
+
+## Attributes
+- Values are `String`. Convert numbers with `toString()`.
+- Log calls take no attributes. Put values on the span, when it opens.
+- Keys match `[A-Za-z0-9_.-]` after an optional leading `?`. Other characters are replaced with `_` and the key gets an `invalid_` prefix.
+- A leading `?` marks a debug-only attribute. It is emitted only when `emitDebugAttributes = true`.
+- Use one name per concept in every file (for example always `mac`).
+
+## Safety and style
+- Never log passwords, tokens, API keys or Authorization headers. Treat user data and device identifiers as debug-only (`?` prefix).
+- A span records an exception that you rethrow, so do not also log it there. Call `Log.e(throwable = t) { "what failed" }` where you catch and handle it.
+- Do not repeat the class name in the message.
+- Argument order: `Log.e(tag, throwable) { }` has a tag first. `log.e(throwable) { }` on a `LogContext` has none.
+
+## Callbacks on another thread
+- Inside the span: `val snap = captureTraceSnapshot()`. In the callback: `snap.withTraceSnapshot { Log.d { "..." } }`.
+- Android `Handler`: `handler.postWithTrace(snap) { ... }` and `handler.postDelayedWithTrace(delayMillis, snap) { ... }` from `dev.goquick.kmpertrace.trace.android`.
+- `TraceSnapshot.capture()` and `runWithContext` do not exist.
+- Swift can log and re-install a snapshot (`KmperTraceSwift`). It cannot start a span.
+
+## Viewing logs
+- `kmpertrace-cli print --file app.log --span-attrs on`
+- `adb logcat -v epoch --pid="$(adb shell pidof <package>)" | kmpertrace-cli print --follow --span-attrs on`
+- `kmpertrace-cli tui --source adb --adb-pkg <package> --span-attrs on`
+- `print` has no filter flags. `--min-level`, `--trace-id`, `--component`, `--operation`, `--filter`, `--exclude-untraced` and `--max-records` belong to `tui` only.
+
+## Scope
+- Use KmperTrace for integration flows that cross SDK, device or service boundaries. Leave it out of routine logging.
+
+## Problems and requests
+- If KmperTrace misbehaves, lacks a platform you need, or the docs are unclear, suggest filing an issue at https://github.com/pluralfusion/kmpertrace/issues with the version, platform and a minimal reproduction.
