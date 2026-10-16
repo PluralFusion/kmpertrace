@@ -32,7 +32,7 @@ This library keeps span context in coroutine-friendly storage so logs can opt in
 
 ## Span attributes
 
-- Span attributes are key/value strings associated with spans and emitted on `SPAN_END`.
+- Span attributes are key/value strings associated with spans and emitted on both `SPAN_START` and `SPAN_END`.
 - Attribute keys use a prefix convention:
   - `a:` — normal attributes (intended to be safe to show in UIs by default).
   - `d:` — debug attributes (may contain sensitive information; gated by config).
@@ -141,9 +141,9 @@ sdk.setListener { state ->
 Many app flows are easiest to debug when each “story” starts with an explicit trigger (a user tap, tab switch,
 bootstrap event, etc.). KmperTrace provides a small helper to make that pattern consistent:
 
-- `LogContext.journey(...)` creates a span and records `a:trigger=<value>` on the span end.
-- It also emits one INFO milestone at the start: `journey started (trigger=...)`, so the trigger is visible even
-  when span attributes are hidden in UIs.
+- `LogContext.journey(...)` creates a span and records `a:trigger=<value>` on both span start and span end.
+- The `trigger` attribute is the record of the trigger. `journey(...)` does not emit a separate log line, so the
+  trigger is visible only when span attributes are shown in the CLI.
 - If there is no active trace, the journey span becomes a root span (new trace). If called inside an existing trace,
   it becomes a child span in the same trace.
 
@@ -166,11 +166,13 @@ suspend fun onPairClicked(rescan: Boolean) = log.journey(
 
 ```kotlin
 suspend fun doWork() = traceSpan("App", "loadData") {
-    log { "fetching data" }      // bound to span (trace/span IDs present)
+    log { "fetching data" }      // SpanScope.log: bound to span (trace/span IDs present)
     val result = repo.fetch()
     log(Level.DEBUG) { "result=${result.size}" }
 }
 
-// Outside a span:
+// `log { }` and `log(Level.DEBUG) { }` are `SpanScope.log`. They work only inside the block of a span helper
+// that provides a `SpanScope` (the `traceSpan` overloads). They are not global functions.
+// Outside a span, use `Log`:
 Log.i { "started app" }          // unbound; no trace/span IDs attached
 ```

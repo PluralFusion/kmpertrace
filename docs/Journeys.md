@@ -12,8 +12,7 @@ It is designed for app debugging (including HMScale): you start a journey at the
 
 - A span intended to represent a single user/system “story”.
 - A required, standardized trigger (`tap.*`, `tab.*`, `system.*`).
-- One INFO milestone at the start: `journey started (trigger=...)` (useful even when span attributes are hidden).
-- A `trigger` span attribute emitted on span end (`a:trigger=...`).
+- A `trigger` span attribute (`a:trigger=...`), emitted on both span start and span end. This attribute is the record of the trigger. `journey(...)` does not emit a separate log line.
 - Default nesting behavior:
   - If no trace is active → the journey span becomes the **root span** (new trace).
   - If a trace/span is already active → the journey span becomes a **child span** in the same trace.
@@ -137,7 +136,7 @@ backgroundScope.launch(snap.asCoroutineContext()) {
 At minimum, each journey trace will have:
 
 - a root span like `PairDeviceNode.scanForScales`
-- one log line near the top: `journey started (trigger=tap.PairButton)`
+- the trigger on the span as the `trigger` attribute (`tap.PairButton`), visible with `--span-attrs on` or the `a` key in `tui`
 - your nested spans + logs under it
 
 If you see “floating” bullets outside any trace tree, treat that as a signal you crossed a boundary that needs a `TraceSnapshot` bridge.

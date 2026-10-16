@@ -63,7 +63,7 @@ kotlin {
       // export(libs.kmpertrace.runtime)
       //
       // Or coordinates:
-      // export("dev.goquick:kmpertrace-runtime:<version>")
+      // export("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
     }
   }
 
@@ -76,7 +76,7 @@ kotlin {
       // api(libs.kmpertrace.runtime)
       //
       // Or coordinates:
-      api("dev.goquick:kmpertrace-runtime:<version>")
+      api("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
     }
   }
 }
