@@ -12,7 +12,7 @@ The flow is a login call that either succeeds or fails.
 
 Before:
 
-```kotlin
+```kotlin compile
 suspend fun loginBefore(api: AuthApi, userId: String) {
     println("login start userId=$userId")
     try {
@@ -27,7 +27,7 @@ suspend fun loginBefore(api: AuthApi, userId: String) {
 
 After:
 
-```kotlin
+```kotlin compile
 suspend fun loginAfter(api: AuthApi, userId: String) =
     traceSpan(
         component = "AuthRepository",
@@ -42,7 +42,7 @@ suspend fun loginAfter(api: AuthApi, userId: String) =
 
 Both versions use this interface and the imports `dev.goquick.kmpertrace.log.Log` and `dev.goquick.kmpertrace.trace.traceSpan`:
 
-```kotlin
+```kotlin compile
 interface AuthApi { suspend fun login(userId: String): String }
 ```
 
@@ -52,7 +52,7 @@ The `try` block is gone. A span records an exception that leaves it, so the fail
 
 Before (call forms taken from the Timber README):
 
-```kotlin
+```kotlin fragment
 Timber.d("login start userId=%s", userId)
 // ...
 Timber.d(e, "login failed")
@@ -64,7 +64,7 @@ After: the same `loginAfter` function as above. Replace each `Timber.d("... %s",
 
 Before (call forms taken from the Kermit docs):
 
-```kotlin
+```kotlin fragment
 private val log = Logger.withTag("AuthRepository")
 
 log.i { "login start userId=$userId" }

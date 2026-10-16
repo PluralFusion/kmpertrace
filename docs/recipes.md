@@ -6,7 +6,7 @@ Terms: a **span** is one timed step with its own ID. A **trace** is the set of s
 
 Imports that the snippets assume:
 
-```kotlin
+```kotlin compile
 import dev.goquick.kmpertrace.log.Log
 import dev.goquick.kmpertrace.log.journey
 import dev.goquick.kmpertrace.trace.TraceTrigger
@@ -18,7 +18,7 @@ import dev.goquick.kmpertrace.trace.traceSpan
 
 Wrap the flow in one span and each step in a child span. A `traceSpan` call inside another `traceSpan` creates a child span in the same trace. `traceSpan("FetchProfile")` takes only a name.
 
-```kotlin
+```kotlin compile
 data class Profile(val name: String)
 data class Contact(val name: String)
 
@@ -48,7 +48,7 @@ If you switch dispatchers yourself inside a span, use `withTraceContext(dispatch
 
 A callback that a third-party SDK runs on its own thread has no trace. Capture a snapshot inside the span, then re-install it in the callback.
 
-```kotlin
+```kotlin compile
 interface Sdk {
     fun setListener(listener: (String) -> Unit)
 }
@@ -66,7 +66,7 @@ suspend fun watchState(sdk: Sdk) =
 
 On Android, `Handler.postWithTrace` and `Handler.postDelayedWithTrace` (package `dev.goquick.kmpertrace.trace.android`) install the snapshot for you. They exist only in the Android target.
 
-```kotlin
+```kotlin fragment
 interface ScaleSdk {
     fun connect(mac: String)
 }
@@ -100,7 +100,7 @@ When an exception leaves a span, the span writes its end record at ERROR level w
 
 So a layer that only passes the exception on needs no `try` and no `Log.e`:
 
-```kotlin
+```kotlin compile
 class Repo(private val api: Api) {
     suspend fun load(userId: String): Profile =
         traceSpan(component = "Repo", operation = "load") {
@@ -111,7 +111,7 @@ class Repo(private val api: Api) {
 
 The layer that handles the failure logs it, once:
 
-```kotlin
+```kotlin compile
 suspend fun profileName(repo: Repo, userId: String): String =
     try {
         repo.load(userId).name
@@ -127,7 +127,7 @@ Call `KmperTrace.configure` at process start, before the first composition. The 
 
 Start a trace where the user acts. `journey` is an extension on `LogContext` and records the trigger as the `trigger` attribute:
 
-```kotlin
+```kotlin fragment
 @Composable
 fun RefreshButton(refresh: suspend () -> Unit) {
     val scope = rememberCoroutineScope()
