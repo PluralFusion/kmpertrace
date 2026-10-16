@@ -24,8 +24,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import dev.goquick.kmpertrace.core.Level
-import dev.goquick.kmpertrace.log.KmperTrace
 import dev.goquick.kmpertrace.sampleapp.data.FakeDatabase
 import dev.goquick.kmpertrace.sampleapp.data.FakeDownloader
 import dev.goquick.kmpertrace.sampleapp.data.FakeNetworkService
@@ -42,11 +40,6 @@ fun App() {
     val viewModel = rememberProfileViewModel()
 
     LaunchedEffect(Unit) {
-        KmperTrace.configure(
-            minLevel = Level.DEBUG,
-            serviceName = "sample-app",
-            emitDebugAttributes = true,
-        )
         viewModel.refreshAll(DEFAULT_USER_ID)
     }
 

@@ -7,6 +7,7 @@ import org.w3c.dom.HTMLDivElement
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    initKmperTrace()
     ComposeViewport(document.getElementById("root") as HTMLDivElement) {
         App()
     }
