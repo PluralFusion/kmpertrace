@@ -60,6 +60,8 @@ Start the journey as close as possible to the trigger:
 Compose pattern:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 val log = Log.forComponent("PairDeviceNode")
 val scope = rememberCoroutineScope()
 
@@ -107,6 +109,7 @@ Most “trace=0” lines come from:
 The supported fix is `TraceSnapshot`:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
 import dev.goquick.kmpertrace.trace.captureTraceSnapshot
 
 log.journey("scanForScales", TraceTrigger.tap("PairButton")) {
@@ -123,6 +126,8 @@ log.journey("scanForScales", TraceTrigger.tap("PairButton")) {
 If you need to launch into a separate scope, pass the snapshot coroutine context:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 val snap = captureTraceSnapshot()
 backgroundScope.launch(snap.asCoroutineContext()) {
     Log.i { "running in background but still attached to the journey span" }
