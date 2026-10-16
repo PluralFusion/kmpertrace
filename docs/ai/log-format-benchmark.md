@@ -118,9 +118,10 @@ The full tree was a smaller file than the plain log but cost more tokens. I did 
 
 1. Remove the device names and order from the symptom, and use a vague report.
 2. Use logs of 1,000 to 5,000 lines from many concurrent flows, and a plain log without the order ID on each line.
-3. Add the source code to the prompt.
-4. Run 10 trials per cell and a second model.
-5. Replace the `KF` prototypes with real `print` filters, and add the JSON output from the design as a condition, once they are built.
+3. Add a scenario from the use the maintainers value most: a mobile flow that fails because an OS permission (for example Bluetooth or notifications) was denied or revoked, with a vendor SDK, Bluetooth and HTTP in the same flow.
+4. Add the source code to the prompt.
+5. Run 10 trials per cell and a second model.
+6. Replace the `KF` prototypes with real `print` filters, and add the JSON output from the design as a condition, once they are built.
 
 ## Reproduce
 
