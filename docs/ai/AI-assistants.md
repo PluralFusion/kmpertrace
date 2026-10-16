@@ -35,7 +35,7 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
 - journey() is an extension on LogContext: Log.forComponent("X").journey(operation, TraceTrigger.tap("Y")) { ... }
 - View logs: kmpertrace-cli print --file app.log --span-attrs on
   or: kmpertrace-cli tui --source adb --adb-pkg <package>
-- Details: docs/AI-assistants.md
+- Details: docs/ai/AI-assistants.md
 ````
 
 Ready-to-copy versions for Claude Code, Cursor and GitHub Copilot are in [agent-templates/](agent-templates/README.md).
@@ -182,7 +182,7 @@ This example needs `import android.os.Handler` and `import android.os.Looper`. B
 
 ### c. Viewing logs with the CLI
 
-The CLI needs Java 17 or newer. Install steps are in the [README](../README.md#quick-start). It has two commands, `print` and `tui`.
+The CLI needs Java 17 or newer. Install steps are in the [README](../../README.md#quick-start). It has two commands, `print` and `tui`.
 
 `print` renders a log file or piped input once. Add `--follow` to keep reading.
 
@@ -245,4 +245,4 @@ Correct form: `mapOf("count" to count.toString())`.
 Correct form: `Log.e(throwable = t) { "message" }` or `log.e(throwable = t) { "message" }`.
 
 **Creating spans from Swift.** The Swift API (`KmperTraceSwift`) can log and re-install a snapshot. It cannot start a span.
-Correct form: create the span in Kotlin and use `snapshot.with { }` in Swift. See [IOS-KMP-Swift.md](IOS-KMP-Swift.md).
+Correct form: create the span in Kotlin and use `snapshot.with { }` in Swift. See [IOS-KMP-Swift.md](../IOS-KMP-Swift.md).
