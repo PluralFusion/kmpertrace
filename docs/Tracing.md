@@ -64,6 +64,8 @@ In those cases, you can capture the current trace/span binding inside a span and
 logs remain attached to the originating span (no “floating” unbound records in the CLI).
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 suspend fun connect() = traceSpan(component = "ConnectScaleUseCase", operation = "execute") {
     val snap = captureTraceSnapshot()
 
@@ -90,6 +92,8 @@ Common causes:
 Prefer `withTraceContext(dispatcher)` when you own the hop:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 withTraceContext(ioDispatcher) {
     Log.d { "still bound to the current span" }
 }
@@ -128,6 +132,8 @@ db.transaction {
 Use snapshot wrappers when crossing non-coroutine async boundaries:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 val snap = captureTraceSnapshot()
 sdk.setListener { state ->
     snap.withTraceSnapshot {
@@ -150,6 +156,8 @@ bootstrap event, etc.). KmperTrace provides a small helper to make that pattern 
 For a full tutorial and HMScale-oriented patterns, see `docs/Journeys.md`.
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 val log = Log.forComponent("PairDevice")
 
 suspend fun onPairClicked(rescan: Boolean) = log.journey(
@@ -165,6 +173,8 @@ suspend fun onPairClicked(rescan: Boolean) = log.journey(
 ## Quick usage
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 suspend fun doWork() = traceSpan("App", "loadData") {
     log { "fetching data" }      // SpanScope.log: bound to span (trace/span IDs present)
     val result = repo.fetch()

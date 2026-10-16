@@ -39,6 +39,8 @@ That last part is the "real world" win: when you cross a callback boundary, it's
 logs that don't belong to any trace. `TraceSnapshot` lets you carry the context across:
 
 ```kotlin
+import dev.goquick.kmpertrace.log.Log
+
 traceSpan("Payments", "chargeCard") {
     val snap = captureTraceSnapshot()
     sdk.chargeCard { result ->

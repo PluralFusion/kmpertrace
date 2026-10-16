@@ -121,25 +121,28 @@ reconstructed from plain log output.*
    ```kotlin
    commonMain {
        dependencies {
-           implementation("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
+           implementation("dev.goquick.kmpertrace:kmpertrace-runtime:0.3.3")
        }
    }
    ```
 
-3. **Configure KmperTrace at startup**
+3. **Configure KmperTrace at process start**
 
-   Somewhere in your app initialization (per process):
+   Call `KmperTrace.configure` once, before the first `Log` or `traceSpan` call. Records logged
+   before it runs are dropped, so do not call it inside the first composition.
 
    ```kotlin
-   fun App() {
-        LaunchedEffect(Unit) { 
-            KmperTrace.configure(
-                minLevel = Level.DEBUG,
-                serviceName = "sample-app",
-            )
-        }
+   fun initKmperTrace() {
+       KmperTrace.configure(
+           minLevel = Level.DEBUG,
+           serviceName = "sample-app",
+       )
    }
    ```
+
+   Call it from your platform entry point: `Application.onCreate` on Android, the start of `main`
+   on desktop and Wasm, and before the Compose view controller is created on iOS. The sample app
+   does this in `sample-app/src/commonMain/kotlin/dev/goquick/kmpertrace/sampleapp/KmperTraceSetup.kt`.
 
 4. **Wrap work in spans and log**
 
