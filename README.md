@@ -332,6 +332,15 @@ or it will look like this in case of failure:
 
 ---
 
+## Use with AI assistants
+
+If you use an AI coding assistant in a project that uses KmperTrace, see
+[docs/ai/AI-assistants.md](docs/ai/AI-assistants.md). It has a block to paste into `AGENTS.md` or
+`CLAUDE.md`, conventions and worked examples. [llms.txt](llms.txt) lists the docs for tools that
+read it.
+
+---
+
 ## Status
 
 KmperTrace is early‑stage and APIs may change before `1.0`. Feedback, issues, and ideas for
