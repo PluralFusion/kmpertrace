@@ -1,0 +1,26 @@
+# KmperTrace
+
+KmperTrace is a tracing and structured logging library for Kotlin Multiplatform (Android, iOS/Swift, Desktop, Wasm) with a CLI that rebuilds trace trees from plain logs.
+
+Current release: 0.3.3. Maven coordinates: dev.goquick.kmpertrace:kmpertrace-runtime
+
+## Start here
+
+- [README](https://github.com/pluralfusion/kmpertrace/blob/main/README.md): Overview, install, configuration and a first span.
+- [Using KmperTrace with AI coding assistants](https://github.com/pluralfusion/kmpertrace/blob/main/docs/AI-assistants.md): A block to paste into AGENTS.md or CLAUDE.md, conventions, worked examples and common mistakes.
+
+## Guides
+
+- [Tracing and log binding](https://github.com/pluralfusion/kmpertrace/blob/main/docs/Tracing.md): Spans, attributes, trace snapshots and why a log line may show no trace.
+- [Journeys](https://github.com/pluralfusion/kmpertrace/blob/main/docs/Journeys.md): Start a trace from a user or system trigger.
+- [CLI user guide](https://github.com/pluralfusion/kmpertrace/blob/main/docs/CLI-UserGuide.md): The print and tui commands, flags and keys.
+
+## Install and examples
+
+- [CLI install instructions](https://github.com/pluralfusion/kmpertrace/blob/main/README.md#quick-start): Installer commands and requirements for kmpertrace-cli.
+- [Sample app](https://github.com/pluralfusion/kmpertrace/tree/main/sample-app/src/commonMain/kotlin/dev/goquick/kmpertrace/sampleapp): A Compose Multiplatform app that uses spans and logs.
+
+## iOS
+
+- [KMP app with Swift host code](https://github.com/pluralfusion/kmpertrace/blob/main/docs/IOS-KMP-Swift.md): Call KmperTrace from Swift through a KMP framework.
+- [iOS XCFramework](https://github.com/pluralfusion/kmpertrace/blob/main/docs/IOS-XCFramework.md): Use the runtime in a pure Swift app.
