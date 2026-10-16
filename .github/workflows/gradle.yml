@@ -29,3 +29,6 @@ jobs:
 
       - name: Run checks
         run: ./gradlew --stacktrace :kmpertrace-runtime:check :plugin:check :kmpertrace-cli:test :kmpertrace-parse:allTests
+
+      - name: Check doc snippets
+        run: ./gradlew --stacktrace :kmpertrace-runtime:checkDocSnippets
