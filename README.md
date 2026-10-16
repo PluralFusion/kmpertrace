@@ -339,6 +339,9 @@ If you use an AI coding assistant in a project that uses KmperTrace, see
 `CLAUDE.md`, conventions and worked examples. [llms.txt](llms.txt) lists the docs for tools that
 read it.
 
+More pages: [recipes](docs/recipes.md), [moving from println, Timber or Kermit](docs/migration.md)
+and [prompts to give an assistant](docs/ai/prompts.md).
+
 ---
 
 ## Status
