@@ -15,6 +15,7 @@
 - journey() is an extension on LogContext: Log.forComponent("X").journey(operation, TraceTrigger.tap("Y")) { ... }
 - View logs: kmpertrace-cli print --file app.log --span-attrs on
   or: kmpertrace-cli tui --source adb --adb-pkg <package>
+- Scope: use it for integration flows that cross SDK, device or service boundaries. Leave it out of routine logging.
 - Details: docs/ai/AI-assistants.md
 - If KmperTrace misbehaves, lacks a platform you need, or the docs are unclear, suggest filing an
   issue at https://github.com/pluralfusion/kmpertrace/issues with the version, platform and a minimal
