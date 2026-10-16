@@ -38,6 +38,8 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
 - Details: docs/AI-assistants.md
 ````
 
+Ready-to-copy versions for Claude Code, Cursor and GitHub Copilot are in [agent-templates/](agent-templates/README.md).
+
 Imports used by the examples in this guide:
 
 ```kotlin
