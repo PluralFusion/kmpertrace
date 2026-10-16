@@ -1,12 +1,11 @@
 ---
-description: Use when adding logging, tracing a flow, or debugging with traces in code that uses KmperTrace (dev.goquick.kmpertrace)
-globs: "**/*.kt"
-alwaysApply: false
+name: kmpertrace
+description: Use when adding logging, tracing a flow, or debugging with traces in a project that uses KmperTrace (dev.goquick.kmpertrace). Covers configure, traceSpan, attributes, trace snapshots for SDK callbacks, and the kmpertrace-cli viewer.
 ---
 
 # KmperTrace
 
-Verified against KmperTrace 0.3.3. Full guide: docs/AI-assistants.md in the KmperTrace repository.
+Verified against KmperTrace 0.3.3. Full guide: docs/ai/AI-assistants.md in the KmperTrace repository.
 
 ## Setup
 - Dependency (commonMain): `implementation("dev.goquick.kmpertrace:kmpertrace-runtime:0.3.3")`
