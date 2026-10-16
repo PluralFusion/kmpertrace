@@ -208,7 +208,7 @@ mavenPublishing {
 
     pom {
         name.set("KmperTrace Runtime")
-        description.set("Multiplatform runtime for KmperTrace logging and tracing")
+        description.set("Kotlin Multiplatform runtime for structured logging and tracing on Android, iOS, desktop and Wasm")
         url.set("https://github.com/pluralfusion/kmpertrace")
         licenses {
             license {
@@ -222,6 +222,10 @@ mavenPublishing {
                 name = "Toly Pochkin"
                 url = "https://github.com/mobiletoly"
             }
+        }
+        issueManagement {
+            system.set("GitHub Issues")
+            url.set("https://github.com/pluralfusion/kmpertrace/issues")
         }
         scm {
             connection = "scm:git:https://github.com/pluralfusion/kmpertrace.git"
