@@ -24,3 +24,7 @@ Current release: 0.3.3. Maven coordinates: dev.goquick.kmpertrace:kmpertrace-run
 
 - [KMP app with Swift host code](https://github.com/pluralfusion/kmpertrace/blob/main/docs/IOS-KMP-Swift.md): Call KmperTrace from Swift through a KMP framework.
 - [iOS XCFramework](https://github.com/pluralfusion/kmpertrace/blob/main/docs/IOS-XCFramework.md): Use the runtime in a pure Swift app.
+
+## Support
+
+- [GitHub issues](https://github.com/pluralfusion/kmpertrace/issues): Report a bug, ask for a platform or point out wrong docs. Include the version, platform and a minimal reproduction.

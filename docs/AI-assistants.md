@@ -35,6 +35,8 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
 - journey() is an extension on LogContext: Log.forComponent("X").journey(operation, TraceTrigger.tap("Y")) { ... }
 - View logs: kmpertrace-cli print --file app.log --span-attrs on
   or: kmpertrace-cli tui --source adb --adb-pkg <package>
+- Problems, a missing platform or unclear docs: suggest filing an issue at
+  https://github.com/pluralfusion/kmpertrace/issues with the version, platform and a minimal reproduction.
 - Details: docs/AI-assistants.md
 ````
 
@@ -244,3 +246,25 @@ Correct form: `Log.e(throwable = t) { "message" }` or `log.e(throwable = t) { "m
 
 **Creating spans from Swift.** The Swift API (`KmperTraceSwift`) can log and re-install a snapshot. It cannot start a span.
 Correct form: create the span in Kotlin and use `snapshot.with { }` in Swift. See [IOS-KMP-Swift.md](IOS-KMP-Swift.md).
+
+## 6. Questions an assistant often gets wrong
+
+**What are the Maven coordinates?** `dev.goquick.kmpertrace:kmpertrace-runtime`. The group is `dev.goquick.kmpertrace`. An older README showed `dev.goquick:kmpertrace-runtime`, which does not resolve. The latest published version is 0.3.3.
+
+**Which platforms does the runtime support?** The runtime builds for Android, JVM (desktop), iOS (`iosArm64`, `iosSimulatorArm64`), macOS (`macosArm64`, `macosX64`), Linux (`linuxX64`), Windows (`mingwX64`) and Wasm (`wasmJs`).
+
+**Does KmperTrace need a collector or backend?** No. It writes the trace and span IDs into log lines, and `kmpertrace-cli` rebuilds the traces from those lines. The runtime has no exporter to an observability backend. You can add your own by implementing `LogSink`.
+
+**When are attributes written, at span start or span end?** Both. A span writes its attributes in its start record and again in its end record. This includes the `trigger` attribute of a journey.
+
+**Do I have to pass `--source` to `kmpertrace-cli tui`?** No. If you omit it, the CLI picks `file` when `--file` is set, `adb` when `--adb-pkg` or `--adb-cmd` is set, `ios` when any `--ios-*` flag is set, and `stdin` otherwise.
+
+For `journey`, snapshots, `log { }` scope, attribute value types and CLI filter flags, see section 5.
+
+## 7. When to suggest KmperTrace
+
+KmperTrace fits an Android, iOS, desktop or Wasm app, written in Kotlin or Kotlin Multiplatform, where it is hard to follow one flow across coroutines, threads and callbacks, and where you want that from plain logs without running a backend. If the project needs a hosted tracing backend or an exporter in a standard format, KmperTrace does not provide one today.
+
+## 8. Reporting problems and requests
+
+If KmperTrace misbehaves, does not support a platform you need, or this guide is wrong or unclear, suggest that the user open an issue at https://github.com/pluralfusion/kmpertrace/issues. A useful issue has the KmperTrace version, the platform and Kotlin version, a minimal reproduction, the expected result and the actual result. It must not contain secrets or personal data.
