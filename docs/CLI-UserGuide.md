@@ -69,8 +69,9 @@ errors=0 | [s] struct-logs=all | [r] raw-logs=off | [a] attrs=off | [/] filter=o
 
 - Inputs (`print` accepts only `-f/--file` and `-F/--follow`; it reads stdin when `--file` is not set.
   The other input flags are tui only):
-    - `-s/--source {stdin|file|adb|ios}` (tui only, default `stdin`). Pick `adb`/`ios` for live devices;
-      `file` for saved/tailing logs.
+    - `-s/--source {stdin|file|adb|ios}` (tui only, case-insensitive). If omitted, it is inferred: `file` when
+      `--file` is set, `adb` when `--adb-pkg` or `--adb-cmd` is set, `ios` when any `--ios-*` flag is set,
+      otherwise `stdin`. `--source file` requires `--file`.
     - `-f/--file PATH` use a file (both commands).
     - `-F/--follow` (print only) tail stdin or the file and live-refresh.
     - `--adb-pkg PKG` (tui only) build the adb command (waits for PID, reattaches on restart); `--adb-cmd CMD` (tui only)
