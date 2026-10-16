@@ -205,7 +205,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 // A block fenced as ```kotlin compile is compiled (JVM) against the runtime. A block fenced as
 // ```kotlin fragment is skipped. A kotlin block with neither marker fails the build.
 // Blocks of one file are compiled together, in order, and may use these imports without writing them.
-val docSnippetFiles = listOf("README.md", "docs/AI-assistants.md", "docs/recipes.md", "docs/migration.md")
+val docSnippetFiles = listOf("README.md", "docs/ai/AI-assistants.md", "docs/recipes.md", "docs/migration.md")
 val docSnippetPrelude = listOf(
     "dev.goquick.kmpertrace.core.Level",
     "dev.goquick.kmpertrace.log.KmperTrace",
