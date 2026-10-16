@@ -40,9 +40,9 @@ logs that don't belong to any trace. `TraceSnapshot` lets you carry the context 
 
 ```kotlin
 traceSpan("Payments", "chargeCard") {
-    val snap = TraceSnapshot.capture()
+    val snap = captureTraceSnapshot()
     sdk.chargeCard { result ->
-        snap.runWithContext { Log.i { "charge result=$result" } }
+        snap.withTraceSnapshot { Log.i { "charge result=$result" } }
     }
 }
 ```

@@ -121,7 +121,7 @@ reconstructed from plain log output.*
    ```kotlin
    commonMain {
        dependencies {
-           implementation("dev.goquick:kmpertrace-runtime:<version>")
+           implementation("dev.goquick.kmpertrace:kmpertrace-runtime:<version>")
        }
    }
    ```
@@ -218,6 +218,9 @@ This tool was tested on MacOS and Linux. Non-interactive print mode (or piping l
 lacks the POSIX stty path), so Windows will fall back to the line-buffered input: type the letter
 and press Enter. ANSI styling works best in Windows Terminal/PowerShell with VT enabled (modern
 Windows does this by default); classic cmd.exe may look worse but still functions.
+
+`print` has no filter flags. `--min-level`, `--trace-id`, `--component`, `--operation`, `--filter`,
+`--exclude-untraced` and `--max-records` belong to `tui` only.
 
 See `docs/CLI-UserGuide.md` for current flags and interactive keys.
 
