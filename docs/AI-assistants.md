@@ -28,7 +28,8 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
 - Attribute values are Strings. Keys match [A-Za-z0-9_.-]. A leading "?" marks a debug-only attribute.
   Log calls take no attributes, so put values on the span.
 - Never log passwords, tokens, API keys or Authorization headers. User data and device IDs go in "?" attributes.
-- Log an exception once, where it is caught: Log.e(throwable = t) { "what failed" }.
+- A span records an exception that you rethrow, so do not also log it there. Call
+  Log.e(throwable = t) { "what failed" } where you catch and handle it.
 - SDK callback on another thread: val snap = captureTraceSnapshot() inside the span, then
   snap.withTraceSnapshot { ... } in the callback. Android Handler: handler.postWithTrace(snap) { ... }.
 - journey() is an extension on LogContext: Log.forComponent("X").journey(operation, TraceTrigger.tap("Y")) { ... }
@@ -75,7 +76,7 @@ fun setUpKmperTrace(isDebugBuild: Boolean) {
 
 **Secrets and personal data.** Never log passwords, tokens, API keys or Authorization headers, in a message or in an attribute. Treat user data and device identifiers as debug-only (`?` prefix).
 
-**Log an exception once.** Log it at the lowest layer that still has the context to describe it, then rethrow or handle it. If an exception leaves a span block, the span end record already carries the error type, message and stack trace. Logging it again in each layer prints the same stack several times.
+**Log an exception once.** When an exception leaves a span block, the span writes its end record at ERROR level with the error type, message and stack trace. Each enclosing span that the exception leaves writes the same stack trace again. A `Log.e` call before the rethrow adds one more copy. So do not log an exception you are about to rethrow. Call `Log.e(throwable = t)` where you catch and handle the exception, for example when you show an error state or fall back to a default.
 
 **Do not repeat the class name in the message.** The logger tag and the span already carry the component name. Write `"fetch failed"`. Avoid `"ProfileRepository: fetch failed"`.
 
@@ -95,8 +96,6 @@ interface ProfileApi {
 }
 
 class ProfileRepository(private val api: ProfileApi) {
-    private val log = Log.forComponent("ProfileRepository")
-
     suspend fun loadProfile(userId: String, email: String): Profile =
         traceSpan(
             component = "ProfileRepository",
@@ -107,14 +106,21 @@ class ProfileRepository(private val api: ProfileApi) {
             ),
         ) {
             Log.d { "fetching from network" }
-            try {
-                api.fetch(userId)
-            } catch (t: Throwable) {
-                log.e(throwable = t) { "fetch failed" }
-                throw t
-            }
+            api.fetch(userId)
         }
 }
+```
+
+If the caller handles the failure, log it there. This is the one `Log.e` call for the exception:
+
+```kotlin
+suspend fun profileName(repo: ProfileRepository, userId: String, email: String): String =
+    try {
+        repo.loadProfile(userId, email).name
+    } catch (e: Exception) {
+        Log.e(throwable = e) { "could not load profile, using default" }
+        "unknown"
+    }
 ```
 
 ### b. A callback from a third-party SDK on another thread
