@@ -7,7 +7,7 @@ Current release: 0.3.3. Maven coordinates: dev.goquick.kmpertrace:kmpertrace-run
 ## Start here
 
 - [README](https://github.com/pluralfusion/kmpertrace/blob/main/README.md): Overview, install, configuration and a first span.
-- [Using KmperTrace with AI coding assistants](https://github.com/pluralfusion/kmpertrace/blob/main/docs/AI-assistants.md): A block to paste into AGENTS.md or CLAUDE.md, conventions, worked examples and common mistakes.
+- [Using KmperTrace with AI coding assistants](https://github.com/pluralfusion/kmpertrace/blob/main/docs/ai/AI-assistants.md): A block to paste into AGENTS.md or CLAUDE.md, conventions, worked examples and common mistakes.
 
 ## Guides
 
