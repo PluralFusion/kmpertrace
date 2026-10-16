@@ -67,16 +67,18 @@ errors=0 | [s] struct-logs=all | [r] raw-logs=off | [a] attrs=off | [/] filter=o
 
 ## Flags (essentials)
 
-- Inputs:
-    - `-s/--source {stdin|file|adb|ios}` (default `stdin`). Pick `adb`/`ios` for live devices;
+- Inputs (`print` accepts only `-f/--file` and `-F/--follow`; it reads stdin when `--file` is not set.
+  The other input flags are tui only):
+    - `-s/--source {stdin|file|adb|ios}` (tui only, default `stdin`). Pick `adb`/`ios` for live devices;
       `file` for saved/tailing logs.
-    - `-f/--file PATH` use a file (add `--follow` in `print` to tail).
-    - `--adb-pkg PKG` build the adb command (waits for PID, reattaches on restart); `--adb-cmd CMD`
+    - `-f/--file PATH` use a file (both commands).
+    - `-F/--follow` (print only) tail stdin or the file and live-refresh.
+    - `--adb-pkg PKG` (tui only) build the adb command (waits for PID, reattaches on restart); `--adb-cmd CMD` (tui only)
       override entirely.
-    - `--ios-target {auto|sim|device}` chooses simulator vs real device (default `auto`; requires explicit choice when both are available).
-    - `--ios-proc NAME` iOS process name (required). Used for simulator predicate and for device-side filtering.
-    - `--ios-udid UDID` selects a specific simulator/device when multiple exist (use `idevice_id -l` for device UDIDs).
-    - `--ios-cmd CMD` override entirely (advanced).
+    - `--ios-target {auto|sim|device}` (tui only) chooses simulator vs real device (default `auto`; requires explicit choice when both are available).
+    - `--ios-proc NAME` (tui only) iOS process name (required). Used for simulator predicate and for device-side filtering.
+    - `--ios-udid UDID` (tui only) selects a specific simulator/device when multiple exist (use `idevice_id -l` for device UDIDs).
+    - `--ios-cmd CMD` (tui only) override entirely (advanced).
 - Formatting (defaults: `color=auto`, `tui` width=auto, `print` width=unlimited,
   `time-format=time-only`, sources shown):
     - `-C/--color {auto|on|off}` force/disable color.
@@ -86,12 +88,12 @@ errors=0 | [s] struct-logs=all | [r] raw-logs=off | [a] attrs=off | [/] filter=o
       `12:34:56.789` (default).
     - `-H/--hide-source` hide component/operation metadata.
     - `--span-attrs {off|on}` show span attributes next to span names (default `off`); debug attributes render as `?key=...`.
-- Filters (stack/message search is case-insensitive):
+- Filters (tui only; `print` has no filter flags. Stack/message search is case-insensitive):
     - `-m/--min-level {verbose|debug|info|warn|error|assert}`
     - `--trace-id ID`, `--component NAME`, `--operation NAME`
     - `-F/--filter SUBSTRING` match message/stack.
     - `--exclude-untraced` drop records with `trace=0`.
-- Buffer:
+- Buffer (tui only):
     - `-M/--max-records N` ring buffer size before dropping oldest (default 5000).
 - Raw logs:
     - `--raw-logs {off|all|verbose|debug|info|warn|error|assert}` (default `off`). Applies to both
