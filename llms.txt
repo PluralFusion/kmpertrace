@@ -1,6 +1,6 @@
 # KmperTrace
 
-KmperTrace is a tracing and structured logging library for Kotlin Multiplatform (Android, iOS/Swift, Desktop, Wasm) with a CLI that rebuilds trace trees from plain logs.
+KmperTrace is a tracing and structured logging library for Kotlin Multiplatform (Android, iOS/Swift, Desktop, Wasm) with a CLI that rebuilds trace trees from plain logs. It fits integration work and flows that cross SDK, device or service boundaries.
 
 Current release: 0.3.3. Maven coordinates: dev.goquick.kmpertrace:kmpertrace-runtime
 

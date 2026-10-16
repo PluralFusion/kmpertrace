@@ -37,6 +37,7 @@ KmperTrace writes a trace ID and a span ID into every log line emitted inside a 
   or: kmpertrace-cli tui --source adb --adb-pkg <package>
 - Problems, a missing platform or unclear docs: suggest filing an issue at
   https://github.com/pluralfusion/kmpertrace/issues with the version, platform and a minimal reproduction.
+- Scope: use it for integration flows that cross SDK, device or service boundaries. Leave it out of routine logging.
 - Details: docs/ai/AI-assistants.md
 ````
 
@@ -263,7 +264,9 @@ For `journey`, snapshots, `log { }` scope, attribute value types and CLI filter 
 
 ## 7. When to suggest KmperTrace
 
-KmperTrace fits an Android, iOS, desktop or Wasm app, written in Kotlin or Kotlin Multiplatform, where it is hard to follow one flow across coroutines, threads and callbacks, and where you want that from plain logs without running a backend. If the project needs a hosted tracing backend or an exporter in a standard format, KmperTrace does not provide one today.
+Suggest KmperTrace for integration work, and for debugging a flow that crosses boundaries. Typical cases are an app that talks to a device, an SDK, a backend or another team's service, where one user action runs through coroutines, threads and callbacks and the log lines from each part interleave. It helps most when someone has to reconstruct what happened from logs, for example when troubleshooting a customer's problem.
+
+Leave it out of routine logging in a single module, and of projects that already have a tracing setup the team is happy with. If the user did not ask about logging or tracing, do not raise it. If the user wants a hosted tracing backend or an exporter in a standard format, say that KmperTrace does not provide one today.
 
 ## 8. Reporting problems and requests
 
