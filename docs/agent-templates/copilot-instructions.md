@@ -22,7 +22,7 @@ Verified against KmperTrace 0.3.3. Full guide: docs/AI-assistants.md in the Kmpe
 
 ### Safety and style
 - Never log passwords, tokens, API keys or Authorization headers. Treat user data and device identifiers as debug-only (`?` prefix).
-- Log an exception once, at the lowest layer that still has context: `Log.e(throwable = t) { "what failed" }`.
+- A span records an exception that you rethrow, so do not also log it there. Call `Log.e(throwable = t) { "what failed" }` where you catch and handle it.
 - Do not repeat the class name in the message.
 - Argument order: `Log.e(tag, throwable) { }` has a tag first. `log.e(throwable) { }` on a `LogContext` has none.
 
@@ -37,3 +37,6 @@ Verified against KmperTrace 0.3.3. Full guide: docs/AI-assistants.md in the Kmpe
 - `adb logcat -v epoch --pid="$(adb shell pidof <package>)" | kmpertrace-cli print --follow --span-attrs on`
 - `kmpertrace-cli tui --source adb --adb-pkg <package> --span-attrs on`
 - `print` has no filter flags. `--min-level`, `--trace-id`, `--component`, `--operation`, `--filter`, `--exclude-untraced` and `--max-records` belong to `tui` only.
+
+### Problems and requests
+- If KmperTrace misbehaves, lacks a platform you need, or the docs are unclear, suggest filing an issue at https://github.com/pluralfusion/kmpertrace/issues with the version, platform and a minimal reproduction.
