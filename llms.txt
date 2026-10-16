@@ -11,6 +11,9 @@ Current release: 0.3.3. Maven coordinates: dev.goquick.kmpertrace:kmpertrace-run
 
 ## Guides
 
+- [Recipes](https://github.com/pluralfusion/kmpertrace/blob/main/docs/recipes.md): Coroutine flows, SDK callbacks, error handling, Compose and Swift.
+- [Migration](https://github.com/pluralfusion/kmpertrace/blob/main/docs/migration.md): Move from println, Timber or Kermit, with before and after code.
+- [Prompts](https://github.com/pluralfusion/kmpertrace/blob/main/docs/prompts.md): Ten prompts to give an AI coding assistant.
 - [Tracing and log binding](https://github.com/pluralfusion/kmpertrace/blob/main/docs/Tracing.md): Spans, attributes, trace snapshots and why a log line may show no trace.
 - [Journeys](https://github.com/pluralfusion/kmpertrace/blob/main/docs/Journeys.md): Start a trace from a user or system trigger.
 - [CLI user guide](https://github.com/pluralfusion/kmpertrace/blob/main/docs/CLI-UserGuide.md): The print and tui commands, flags and keys.
